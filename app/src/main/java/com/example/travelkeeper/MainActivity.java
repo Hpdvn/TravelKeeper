@@ -5,13 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.travelkeeper.DAO.ConnectionDB;
 import com.example.travelkeeper.DAO.Place;
+import com.example.travelkeeper.DAO.PlacesDAO;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    ConnectionDB connectionDB;
+    PlacesDAO placesDAO;
     ArrayList<Place> places;
 
     @Override
@@ -19,9 +23,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        connectionDB = new ConnectionDB();
-        places = connectionDB.getPlaces();
         Intent intent = new Intent(this, MapsActivity.class);
         startActivity(intent);
+
+        placesDAO = new PlacesDAO();
+        try {
+            System.out.println(placesDAO.getPlacesDB());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
