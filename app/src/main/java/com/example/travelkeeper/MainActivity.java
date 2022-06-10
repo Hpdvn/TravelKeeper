@@ -2,6 +2,7 @@ package com.example.travelkeeper;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.travelkeeper.DAO.ConnectionDB;
@@ -20,5 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         connectionDB = new ConnectionDB();
         places = connectionDB.getPlaces();
+        Intent intent = new Intent(this, MapsActivity.class);
+        startActivity(intent);
     }
 }
