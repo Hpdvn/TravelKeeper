@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PlacesDAO {
-    ArrayList<Place> places;
-    final ArrayList<String> placesColumns = new ArrayList<>(
+    static final ArrayList<String> placesColumns = new ArrayList<>(
             Arrays.asList(
                     "Id",
                     "Name",
@@ -21,10 +20,10 @@ public class PlacesDAO {
             ));
 
     public PlacesDAO() {
-        this.places = new ArrayList<>();
+
     }
 
-    public void insertDB(String table, ArrayList<String> columns, ArrayList<String> elements) throws InterruptedException {
+    public static void insertDB(String table, ArrayList<String> columns, ArrayList<String> elements) throws InterruptedException {
         String columnsString = String.join(", ", columns);
         String elementsString = String.join(", ", elements);
 
@@ -45,7 +44,9 @@ public class PlacesDAO {
         sqlConn.join();
     }
 
-    public ArrayList<Place> getPlacesDB() throws InterruptedException {
+    public static ArrayList<Place> getPlacesDB() throws InterruptedException {
+        ArrayList<Place> places = new ArrayList<>();
+
         Thread sqlConn = new Thread(() -> {
             try {
                 Connection connection = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/travels?useUnicode=true&characterEncoding=UTF-8", "root", "hugotropfort");
@@ -73,12 +74,8 @@ public class PlacesDAO {
         return places;
     }
 
-    public ArrayList<Place> getPlaces() {
-        return this.places;
-    }
-
-    public Place getPlaceById(int id) throws InterruptedException {
-        this.getPlacesDB();
+    public static Place getPlaceById(int id) throws InterruptedException {
+        ArrayList<Place> places = getPlacesDB();
 
         for (Place place : places) {
             if(place.id == id) {
@@ -89,10 +86,12 @@ public class PlacesDAO {
         return null;
     }
 
-    public Place addPlaceDB(Place placeToAdd) throws InterruptedException {
+    public static Place addPlaceDB(Place placeToAdd) throws InterruptedException {
+        ArrayList<Place> places = getPlacesDB();
+
         placeToAdd.id = places.size();
 
-        this.insertDB("places", placesColumns, placeToAdd.placeListAtt());
+        insertDB("places", placesColumns, placeToAdd.placeListAtt());
         places.add(placeToAdd);
 
         return placeToAdd;

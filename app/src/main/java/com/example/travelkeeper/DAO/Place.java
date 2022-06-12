@@ -33,7 +33,7 @@ public class Place {
     }
 
     public ArrayList<String> placeListAtt() {
-        return new ArrayList<String>(
+        return new ArrayList<>(
                 Arrays.asList(
                         this.id+"",
                         this.name,
