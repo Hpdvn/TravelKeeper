@@ -1,11 +1,19 @@
 package com.example.travelkeeper;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,7 +22,11 @@ import android.widget.TextView;
 import com.example.travelkeeper.DAO.Place;
 import com.example.travelkeeper.DAO.PlacesDAO;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class PlaceDetailsActivity extends AppCompatActivity {
     TextView titleDetail, commentDetail, ratingDetail, latitude, longitude;
@@ -37,15 +49,14 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         if (placeId != null) {
             try {
                 place = PlacesDAO.getPlaceById(Integer.parseInt(placeId));
-            } catch (InterruptedException e) {
+                initViews();
+            } catch (InterruptedException | URISyntaxException | IOException e) {
                 e.printStackTrace();
             }
         }
-
-        initViews();
     }
 
-    private void initViews() {
+    private void initViews() throws URISyntaxException, IOException {
         getSupportActionBar().setTitle("Travel keeper - Details");
         titleDetail = findViewById(R.id.place_name_detail);
         commentDetail = findViewById(R.id.comment_detail);
@@ -62,11 +73,9 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         latitude.setText(place.latitude+"");
         longitude.setText(place.longitude+"");
 
-        File imgFile = new  File(place.photoPath);
-        if(imgFile.exists()){
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            image.setImageBitmap(myBitmap);
-        }
+        Uri uri = Uri.parse(place.photoPath);
+        image.setImageURI(uri);
+
     }
 
     private void displayMap(View view) {

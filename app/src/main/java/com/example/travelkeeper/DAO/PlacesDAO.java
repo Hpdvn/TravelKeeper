@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PlacesDAO {
+    static final String jdbcUrl = "jdbc:mysql://10.0.2.2:3306/travels?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false";
     static final ArrayList<String> placesColumns = new ArrayList<>(
             Arrays.asList(
                     "Id",
@@ -27,14 +28,14 @@ public class PlacesDAO {
         String columnsString = String.join(", ", columns);
         String elementsString = String.join(", ", elements);
 
-        String sql = "INSERT INTO " + table + " ("+ columnsString +")\n" +
-                "VALUES ("+ elementsString +")";
+        String sql = "INSERT INTO `" + table + "` ("+ columnsString +")" +
+                " VALUES ("+ elementsString +");";
 
         Thread sqlConn = new Thread(() -> {
             try {
-                Connection connection = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/travels?useUnicode=true&characterEncoding=UTF-8", "root", "hugotropfort");
+                Connection connection = DriverManager.getConnection(jdbcUrl, "root", "hugotropfort");
                 PreparedStatement statement = connection.prepareStatement(sql);
-                statement.executeQuery();
+                statement.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -49,15 +50,15 @@ public class PlacesDAO {
 
         Thread sqlConn = new Thread(() -> {
             try {
-                Connection connection = DriverManager.getConnection("jdbc:mysql://10.0.2.2:3306/travels?useUnicode=true&characterEncoding=UTF-8", "root", "hugotropfort");
+                Connection connection = DriverManager.getConnection(jdbcUrl, "root", "hugotropfort");
                 String sql = "SELECT * FROM places";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
                     int id = Integer.parseInt(resultSet.getString("Id"));
                     String name = resultSet.getString("Name");
-                    float latitude = Float.parseFloat(resultSet.getString("Latitude"));
-                    float longitude = Float.parseFloat(resultSet.getString("Longitude"));
+                    double latitude = Double.parseDouble(resultSet.getString("Latitude"));
+                    double longitude = Double.parseDouble(resultSet.getString("Longitude"));
                     int rate = Integer.parseInt(resultSet.getString("Rate"));
                     String comment = resultSet.getString("Comment");
                     String photoPath = resultSet.getString("PhotoPath");

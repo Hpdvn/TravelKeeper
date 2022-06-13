@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.travelkeeper.DAO.Place;
 import com.example.travelkeeper.DAO.PlacesDAO;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     ArrayList<Place> places;
+    Button addPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +34,23 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        addPlace = findViewById(R.id.add_place);
+
+        addPlace.setOnClickListener(this::addPlace);
     }
 
     private void initPlacesListRecyclerView() throws InterruptedException {
         places = PlacesDAO.getPlacesDB();
-        System.out.println(places);
         ListAdapter listAdapter = new ListAdapter(places, this);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(listAdapter);
+    }
+
+    private void addPlace(View view) {
+        Intent intent = new Intent(this, AddPlaceActivity.class);
+        startActivity(intent);
     }
 }
