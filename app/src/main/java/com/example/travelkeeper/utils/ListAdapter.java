@@ -38,7 +38,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final Place place = places.get(position);
-        holder.bindData(place);
+        holder.fillViewsWithData(place);
 
          holder.relativeLayout.setOnClickListener(v -> {
             Intent intent = new Intent(context, PlaceDetailsActivity.class);
@@ -70,7 +70,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
             relativeLayout = itemView.findViewById(R.id.relativeLayout);
         }
 
-        void bindData(final Place item) {
+        void fillViewsWithData(final Place item) {
             placeName.setText(item.name);
             comment.setText(item.comment);
             rating.setText(item.rate+"");

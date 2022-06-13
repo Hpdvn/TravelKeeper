@@ -12,10 +12,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.location.LocationRequest;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
@@ -25,13 +23,11 @@ import android.widget.Toast;
 import com.example.travelkeeper.DAO.Place;
 import com.example.travelkeeper.DAO.PlacesDAO;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 public class AddPlaceActivity extends AppCompatActivity {
     TextView placeName, comment, rating, imagePath;
-    Button chooseImage, submit;
+    Button chooseImage, submit, allowLocation;
     FusedLocationProviderClient client;
 
     Double lat;
@@ -42,6 +38,7 @@ public class AddPlaceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
         getSupportActionBar().setTitle("Travel keeper - New");
+        initViews();
 
         client = LocationServices.getFusedLocationProviderClient(this);
 
@@ -49,11 +46,31 @@ public class AddPlaceActivity extends AppCompatActivity {
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getCurrentLocation();
         } else {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-            getCurrentLocation();
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
         }
+    }
 
-        initViews();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 100:
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 &&
+                        (grantResults[0] == PackageManager.PERMISSION_GRANTED ||
+                                grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+                    getCurrentLocation();
+                    allowLocation.setVisibility(View.INVISIBLE);
+                } else {
+                    Toast.makeText(this, "Please allow location to put your place on the map!",
+                            Toast.LENGTH_LONG).show();
+                    allowLocation.setVisibility(View.VISIBLE);
+                }
+                return;
+            default:
+                throw new IllegalStateException("Unexpected value: " + requestCode);
+        }
     }
 
     public void getCurrentLocation() {
@@ -61,7 +78,8 @@ public class AddPlaceActivity extends AppCompatActivity {
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -92,9 +110,11 @@ public class AddPlaceActivity extends AppCompatActivity {
 
         chooseImage = findViewById(R.id.select_image_add);
         submit = findViewById(R.id.submit_add);
+        allowLocation = findViewById(R.id.allow_location_add);
         
         chooseImage.setOnClickListener(this::imageChooser);
         submit.setOnClickListener(this::addPlace);
+        allowLocation.setOnClickListener(this::allowLocationPermission);
     }
 
     private void addPlace(View view) {
@@ -131,6 +151,11 @@ public class AddPlaceActivity extends AppCompatActivity {
         i.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
 
         startActivityForResult(Intent.createChooser(i, "Select Picture"), 200);
+    }
+
+    private void allowLocationPermission(View view) {
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
     }
 
     @SuppressLint("WrongConstant")

@@ -55,11 +55,11 @@ public class PlacesDAO {
                 PreparedStatement statement = connection.prepareStatement(sql);
                 ResultSet resultSet = statement.executeQuery();
                 while (resultSet.next()) {
-                    int id = Integer.parseInt(resultSet.getString("Id"));
+                    int id = resultSet.getInt("Id");
                     String name = resultSet.getString("Name");
-                    double latitude = Double.parseDouble(resultSet.getString("Latitude"));
-                    double longitude = Double.parseDouble(resultSet.getString("Longitude"));
-                    int rate = Integer.parseInt(resultSet.getString("Rate"));
+                    double latitude = resultSet.getDouble("Latitude");
+                    double longitude = resultSet.getDouble("Longitude");
+                    int rate = resultSet.getInt("Rate");
                     String comment = resultSet.getString("Comment");
                     String photoPath = resultSet.getString("PhotoPath");
 
