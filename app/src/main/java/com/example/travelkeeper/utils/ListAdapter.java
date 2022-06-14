@@ -40,13 +40,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         final Place place = places.get(position);
         holder.fillViewsWithData(place);
 
-         holder.relativeLayout.setOnClickListener(v -> {
-            Intent intent = new Intent(context, PlaceDetailsActivity.class);
+        holder.relativeLayout.setOnClickListener(v -> {
 
-            intent.putExtra("placeId", place.id+"");
+           Intent intent = new Intent(context, PlaceDetailsActivity.class);
+           intent.putExtra("placeId", place.id);
 
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+           context.startActivity(intent);
         });
     }
 

@@ -35,11 +35,11 @@ public class Place {
     public ArrayList<String> placeListAtt() {
         return new ArrayList<>(
                 Arrays.asList(
-                        this.id+"",
+                        this.id + "",
                         "\'" + this.name + "\'",
-                        this.latitude+"",
-                        this.longitude+"",
-                        this.rate+"",
+                        this.latitude + "",
+                        this.longitude + "",
+                        this.rate + "",
                         "\'" + this.comment + "\'",
                         "\'" + this.photoPath + "\'"
                 ));

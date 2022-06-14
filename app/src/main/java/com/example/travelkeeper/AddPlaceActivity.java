@@ -57,8 +57,8 @@ public class AddPlaceActivity extends AppCompatActivity {
         switch (requestCode) {
             case 100:
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 &&
-                        (grantResults[0] == PackageManager.PERMISSION_GRANTED ||
+                if (grantResults.length >= 2 &&
+                        (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                                 grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                     getCurrentLocation();
                     allowLocation.setVisibility(View.INVISIBLE);
@@ -78,15 +78,8 @@ public class AddPlaceActivity extends AppCompatActivity {
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // Safe belt if location permission not granted
                 return;
             }
             client.getLastLocation().addOnCompleteListener(
@@ -121,11 +114,12 @@ public class AddPlaceActivity extends AppCompatActivity {
         if (placeName.getText().equals("") ||
                 comment.getText().equals("") ||
                 rating.getText().equals("") ||
-                imagePath.getText().equals("No image selected")) {
+                imagePath.getText().toString().equals("No image selected")) {
             Toast.makeText(this, "Required field(s) missing.",
                     Toast.LENGTH_LONG).show();
         } else {
-            Place placeToAdd = new Place(placeName.getText().toString(),
+            Place placeToAdd = new Place(
+                    placeName.getText().toString(),
                     lat,
                     lon,
                     Integer.parseInt(rating.getText().toString()),
@@ -163,7 +157,6 @@ public class AddPlaceActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-
             if (requestCode == 200) {
                 // Get the url of the image from data
                 final int takeFlags = data.getFlags() & Intent.FLAG_GRANT_READ_URI_PERMISSION;

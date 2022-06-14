@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PlacesDAO {
-    static final String jdbcUrl = "jdbc:mysql://10.0.2.2:3306/travels?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false";
-    static final ArrayList<String> placesColumns = new ArrayList<>(
+    private static final String jdbcUrl = "jdbc:mysql://10.0.2.2:3306/travels?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false";
+    private static final ArrayList<String> placesColumns = new ArrayList<>(
             Arrays.asList(
                     "Id",
                     "Name",
@@ -20,9 +20,7 @@ public class PlacesDAO {
                     "PhotoPath"
             ));
 
-    public PlacesDAO() {
-
-    }
+    public PlacesDAO() {}
 
     public static void insertDB(String table, ArrayList<String> columns, ArrayList<String> elements) throws InterruptedException {
         String columnsString = String.join(", ", columns);

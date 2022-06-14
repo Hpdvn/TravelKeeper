@@ -40,15 +40,15 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_place_details);
         Bundle variables = getIntent().getExtras();
 
-        String placeId = null;
+        int placeId = -1;
 
         if (variables != null) {
-            placeId = variables.getString("placeId");
+            placeId = variables.getInt("placeId");
         }
 
-        if (placeId != null) {
+        if (placeId != -1) {
             try {
-                place = PlacesDAO.getPlaceById(Integer.parseInt(placeId));
+                place = PlacesDAO.getPlaceById(placeId);
                 initViews();
             } catch (InterruptedException | URISyntaxException | IOException e) {
                 e.printStackTrace();
@@ -82,6 +82,7 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra("latitude", place.latitude);
         intent.putExtra("longitude", place.longitude);
+        intent.putExtra("name", place.name);
         startActivity(intent);
     }
 }

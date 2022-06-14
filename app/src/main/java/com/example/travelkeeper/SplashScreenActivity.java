@@ -20,7 +20,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         int LOADING_SCREEN_TIMEOUT = 1000;
 
         new Handler().postDelayed(() -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }, LOADING_SCREEN_TIMEOUT);
