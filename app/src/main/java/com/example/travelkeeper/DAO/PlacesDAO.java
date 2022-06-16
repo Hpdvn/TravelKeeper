@@ -85,15 +85,13 @@ public class PlacesDAO {
         sqlConn.join();
     }
 
-    public static Place addPlaceDB(Place placeToAdd) throws InterruptedException {
+    public static void addPlaceDB(Place placeToAdd) throws InterruptedException {
         ArrayList<Place> places = getPlacesDB();
 
         placeToAdd.id = places.size();
 
         insertDB("places", placesColumns, placeToAdd.placeListAtt());
         places.add(placeToAdd);
-
-        return placeToAdd;
     }
 
 }

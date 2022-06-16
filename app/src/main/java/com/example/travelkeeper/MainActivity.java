@@ -37,6 +37,16 @@ public class MainActivity extends AppCompatActivity {
         addPlace.setOnClickListener(this::addPlace);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            initPlacesListRecyclerView();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void initPlacesListRecyclerView() throws InterruptedException {
         places = PlacesDAO.getPlacesDB();
         ListAdapter listAdapter = new ListAdapter(places, this);

@@ -89,12 +89,15 @@
         android:id="@+id/image_path"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
         android:layout_marginTop="4dp"
         android:text="No image selected"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/select_image_add" />
+        app:layout_constraintTop_toBottomOf="@+id/select_image_add"
+        app:layout_goneMarginLeft="10dp"
+        app:layout_goneMarginRight="10dp" />
 
     <Button
         android:id="@+id/submit_add"
@@ -119,6 +122,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_path" />
+
+    <Button
+        android:id="@+id/take_picture"
+        android:layout_width="56dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="40dp"
+        android:text=""
+        app:icon="@drawable/ic_baseline_add_a_photo_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.447"
+        app:layout_constraintStart_toEndOf="@+id/select_image_add"
+        app:layout_constraintTop_toBottomOf="@+id/players_scores"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
