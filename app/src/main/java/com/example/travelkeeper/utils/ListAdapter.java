@@ -1,8 +1,8 @@
 package com.example.travelkeeper.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +69,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
             relativeLayout = itemView.findViewById(R.id.relativeLayout);
         }
 
+        @SuppressLint("SetTextI18n")
         void fillViewsWithData(final Place item) {
             placeName.setText(item.name);
             comment.setText(item.comment);

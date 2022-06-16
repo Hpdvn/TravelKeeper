@@ -1,5 +1,6 @@
 package com.example.travelkeeper;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -25,6 +26,8 @@ import com.example.travelkeeper.DAO.PlacesDAO;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.Objects;
+
 public class AddPlaceActivity extends AppCompatActivity {
     TextView placeName, comment, rating, imagePath;
     Button chooseImage, submit, allowLocation;
@@ -37,7 +40,7 @@ public class AddPlaceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
-        getSupportActionBar().setTitle("Travel keeper - New");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Travel keeper - New");
         initViews();
 
         client = LocationServices.getFusedLocationProviderClient(this);
@@ -51,26 +54,24 @@ public class AddPlaceActivity extends AppCompatActivity {
         }
     }
 
+    // Is launched when requestPermissions() ends
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 100:
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length >= 2 &&
-                        (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                                grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
-                    getCurrentLocation();
-                    allowLocation.setVisibility(View.INVISIBLE);
-                } else {
-                    Toast.makeText(this, "Please allow location to put your place on the map!",
-                            Toast.LENGTH_LONG).show();
-                    allowLocation.setVisibility(View.VISIBLE);
-                }
-                return;
-            default:
-                throw new IllegalStateException("Unexpected value: " + requestCode);
+        if (requestCode == 100) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length >= 2 &&
+                    (grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                            grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+                getCurrentLocation();
+                allowLocation.setVisibility(View.INVISIBLE);
+            } else {
+                Toast.makeText(this, "Please allow location to put your place on the map!",
+                        Toast.LENGTH_LONG).show();
+                allowLocation.setVisibility(View.VISIBLE);
+            }
+            return;
         }
+        throw new IllegalStateException("Unexpected value: " + requestCode);
     }
 
     public void getCurrentLocation() {

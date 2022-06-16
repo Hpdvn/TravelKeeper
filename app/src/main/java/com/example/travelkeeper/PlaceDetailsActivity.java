@@ -1,19 +1,11 @@
 package com.example.travelkeeper;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.content.ContentResolver;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,11 +14,9 @@ import android.widget.TextView;
 import com.example.travelkeeper.DAO.Place;
 import com.example.travelkeeper.DAO.PlacesDAO;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class PlaceDetailsActivity extends AppCompatActivity {
     TextView titleDetail, commentDetail, ratingDetail, latitude, longitude;
@@ -56,8 +46,9 @@ public class PlaceDetailsActivity extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private void initViews() throws URISyntaxException, IOException {
-        getSupportActionBar().setTitle("Travel keeper - Details");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Travel keeper - Details");
         titleDetail = findViewById(R.id.place_name_detail);
         commentDetail = findViewById(R.id.comment_detail);
         ratingDetail = findViewById(R.id.rating_detail);

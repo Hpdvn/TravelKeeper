@@ -2,7 +2,6 @@ package com.example.travelkeeper.DAO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
 public class Place {
     public int id;
@@ -36,12 +35,12 @@ public class Place {
         return new ArrayList<>(
                 Arrays.asList(
                         this.id + "",
-                        "\'" + this.name + "\'",
+                        "'" + this.name + "'",
                         this.latitude + "",
                         this.longitude + "",
                         this.rate + "",
-                        "\'" + this.comment + "\'",
-                        "\'" + this.photoPath + "\'"
+                        "'" + this.comment + "'",
+                        "'" + this.photoPath + "'"
                 ));
     }
 }

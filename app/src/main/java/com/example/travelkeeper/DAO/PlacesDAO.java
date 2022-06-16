@@ -22,27 +22,6 @@ public class PlacesDAO {
 
     public PlacesDAO() {}
 
-    public static void insertDB(String table, ArrayList<String> columns, ArrayList<String> elements) throws InterruptedException {
-        String columnsString = String.join(", ", columns);
-        String elementsString = String.join(", ", elements);
-
-        String sql = "INSERT INTO `" + table + "` ("+ columnsString +")" +
-                " VALUES ("+ elementsString +");";
-
-        Thread sqlConn = new Thread(() -> {
-            try {
-                Connection connection = DriverManager.getConnection(jdbcUrl, "root", "hugotropfort");
-                PreparedStatement statement = connection.prepareStatement(sql);
-                statement.executeUpdate();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-
-        sqlConn.start();
-        sqlConn.join();
-    }
-
     public static ArrayList<Place> getPlacesDB() throws InterruptedException {
         ArrayList<Place> places = new ArrayList<>();
 
@@ -83,6 +62,27 @@ public class PlacesDAO {
         }
 
         return null;
+    }
+
+    public static void insertDB(String table, ArrayList<String> columns, ArrayList<String> elements) throws InterruptedException {
+        String columnsString = String.join(", ", columns);
+        String elementsString = String.join(", ", elements);
+
+        String sql = "INSERT INTO `" + table + "` ("+ columnsString +")" +
+                " VALUES ("+ elementsString +");";
+
+        Thread sqlConn = new Thread(() -> {
+            try {
+                Connection connection = DriverManager.getConnection(jdbcUrl, "root", "hugotropfort");
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.executeUpdate();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        sqlConn.start();
+        sqlConn.join();
     }
 
     public static Place addPlaceDB(Place placeToAdd) throws InterruptedException {
